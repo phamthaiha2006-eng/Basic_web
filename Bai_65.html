@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 65 - Dynamic List (Web Node)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        table {
+            border: 1px solid black;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        td {
+            border: 1px solid black;
+            padding: 6px 10px;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 130px;
+        }
+
+        button {
+            padding: 4px 10px;
+        }
+
+        #webNode {
+            border: 1px solid black;
+            width: 200px;
+            padding: 10px;
+        }
+
+        ul {
+            list-style-type: disc;
+            padding-left: 25px;
+        }
+
+        li {
+            margin: 4px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <table>
+        <tr>
+            <td><button onclick="addNode()">THÊM NODE</button></td>
+            <td>NỘI DUNG: <input type="text" id="newContent" placeholder="Nội dung"></td>
+            <td>VỊ TRÍ: <input type="number" id="addPosition" min="1" placeholder="Vị trí"></td>
+        </tr>
+        <tr>
+            <td><button onclick="deleteNode()">XÓA NODE</button></td>
+            <td></td>
+            <td>VỊ TRÍ: <input type="number" id="deletePosition" min="1" placeholder="Vị trí"></td>
+        </tr>
+        <tr>
+            <td><button onclick="editNode()">SỬA</button></td>
+            <td>NỘI DUNG SỬA: <input type="text" id="editContent" placeholder="Nội dung sửa"></td>
+            <td>VỊ TRÍ: <input type="number" id="editPosition" min="1" placeholder="Vị trí"></td>
+        </tr>
+    </table>
+
+    <div id="webNode">
+        <b>Web Node</b>
+        <ul id="nodeList">
+            <li>Data base</li>
+            <li>Web1</li>
+            <li>Web2</li>
+        </ul>
+    </div>
+
+    <script>
+        function addNode() {
+            const content = document.getElementById("newContent").value.trim();
+            const position = parseInt(document.getElementById("addPosition").value);
+            const nodeList = document.getElementById("nodeList");
+            const li = document.createElement("li");
+
+            if (!content) {
+                alert("Vui lòng nhập nội dung!");
+                document.getElementById("newContent").focus();
+                return;
+            }
+
+            li.textContent = content;
+
+            if (isNaN(position) || position < 1 || position > nodeList.children.length + 1) {
+                nodeList.appendChild(li);
+            } else {
+                nodeList.insertBefore(li, nodeList.children[position - 1]);
+            }
+            document.getElementById("newContent").value = "";
+            document.getElementById("addPosition").value = "";
+        };
+
+        function deleteNode() {
+            const position = parseInt(document.getElementById("deletePosition").value);
+            const nodeList = document.getElementById("nodeList");
+
+            if (isNaN(position) || position < 1 || position > nodeList.children.length) {
+                alert("Vị trí không hợp lệ!");
+                return;
+            }
+            nodeList.removeChild(nodeList.children[position - 1]);
+            document.getElementById("deletePosition").value = "";
+        };
+
+        function editNode() {
+            const content = document.getElementById("editContent").value.trim();
+            const position = parseInt(document.getElementById("editPosition").value);
+            const nodeList = document.getElementById("nodeList");
+
+            if (!content) {
+                alert("Vui lòng nhập nội dung mới!");
+                document.getElementById("editContent").focus();
+                return;
+            }
+
+            if (isNaN(position) || position < 1 || position > nodeList.children.length) {
+                alert("Vị trí không hợp lệ!");
+                return;
+            }
+
+            const oldNode = nodeList.children[position - 1];
+            const newNode = document.createElement("li");
+            newNode.textContent = content;
+            nodeList.replaceChild(newNode, oldNode);
+
+            document.getElementById("editContent").value = "";
+            document.getElementById("editPosition").value = "";
+        };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 63</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 6px 10px;
+        }
+
+        th {
+            background-color: blue;
+            color: white;
+            text-align: center;
+        }
+
+        .highlight {
+            background-color: yellow;
+        }
+
+        .color-box {
+            display: inline-block;
+            width: 100px;
+            padding: 2px 6px;
+            margin-bottom: 4px;
+            color: white;
+        }
+
+        .blue {
+            background-color: skyblue;
+        }
+
+        .red {
+            background-color: red;
+        }
+
+        .yellow {
+            background-color: gold;
+            color: black;
+        }
+
+        .green {
+            background-color: green;
+        }
+
+        .violet {
+            background-color: blueviolet;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Đăng ký thành viên</h2>
+    <form id="registerForm">
+        <label for="name">Tên (*):</label>
+        <input type="text" id="name"><br><br>
+
+        <label>Ngày sinh (*):</label>
+        Ngày:
+        <select id="day"></select>
+        Tháng:
+        <select id="month"></select>
+        Năm:
+        <select id="year"></select><br><br>
+
+        <label>Giới tính (*):</label>
+        <input type="radio" name="gender" value="Nam"> Nam
+        <input type="radio" name="gender" value="Nữ"> Nữ<br><br>
+
+        <label for="email">Email (*):</label>
+        <input type="email" id="email"><br><br>
+
+        <label>Sở thích:</label><br>
+        <input type="checkbox" value="Mua sắm"> Mua sắm<br>
+        <input type="checkbox" value="Du lịch"> Du lịch<br>
+        <input type="checkbox" value="Tán gẫu"> Tán gẫu<br>
+        <input type="checkbox" value="Đọc sách"> Đọc sách<br><br>
+
+        <label>Màu yêu thích:</label><br>
+        <input type="radio" name="color" value="Màu xanh da trời"> <span class="color-box blue">Màu xanh da
+            trời</span><br>
+        <input type="radio" name="color" value="Màu đỏ"> <span class="color-box red">Màu đỏ</span><br>
+        <input type="radio" name="color" value="Màu vàng"> <span class="color-box yellow">Màu vàng</span><br>
+        <input type="radio" name="color" value="Màu xanh lá cây"> <span class="color-box green">Màu xanh lá
+            cây</span><br>
+        <input type="radio" name="color" value="Màu xanh tím"> <span class="color-box violet">Màu xanh
+            tím</span><br><br>
+
+        <button type="button" onclick="register()">Đăng ký</button>
+        <button type="button" onclick="resetForm()">Tiếp</button>
+    </form>
+
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>Tên</th>
+                <th>Email</th>
+                <th>Giới tính</th>
+                <th>Ngày sinh</th>
+                <th>Sở thích</th>
+                <th>Màu yêu thích</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        function loadDateData() {
+            const day = document.getElementById("day");
+            const month = document.getElementById("month");
+            const year = document.getElementById("year");
+
+            for (let i = 1; i <= 31; i++) {
+                day.innerHTML += `<option value="${i}">${i}</option>`;
+            }
+
+            for (let i = 1; i <= 12; i++) {
+                month.innerHTML += `<option value="${i}">${i}</option>`;
+            }
+
+            const currentYear = new Date().getFullYear();
+            for (let i = currentYear; i >= 1900; i--) {
+                year.innerHTML += `<option value="${i}">${i}</option>`;
+            }
+        }
+        loadDateData();
+
+        function register() {
+            const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const gender = document.querySelector("input[name='gender']:checked");
+            const color = document.querySelector("input[name='color']:checked");
+            const day = document.getElementById("day").value;
+            const month = document.getElementById("month").value;
+            const year = document.getElementById("year").value;
+
+            if (!name || !email || !gender || !color) {
+                alert("Vui lòng nhập đầy đủ thông tin bắt buộc!");
+                return;
+            }
+
+            const hobbies = Array.from(document.querySelectorAll("input[type='checkbox']:checked"))
+                .map(cb => cb.value)
+                .join(", ");
+
+            const newRow = document.createElement("tr");
+            newRow.innerHTML = `
+        <td>${name}</td>
+        <td>${email}</td>
+        <td>${gender.value}</td>
+        <td>${day}/${month}/${year}</td>
+        <td>${hobbies}</td>
+        <td>${color.value}</td>
+      `;
+
+            newRow.addEventListener("mouseover", () => newRow.classList.add("highlight"));
+            newRow.addEventListener("mouseleave", () => newRow.classList.remove("highlight"));
+
+            document.querySelector("#dataTable tbody").appendChild(newRow);
+        };
+
+        function resetForm() {
+            document.getElementById("registerForm").reset();
+            document.getElementById("name").focus();
+        };
+    </script>
+</body>
+
+</html>
